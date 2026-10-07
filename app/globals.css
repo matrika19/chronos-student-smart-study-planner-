@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #f9f6f0;
+  --ink: #121212;
+  --grain: 0.06;
+  --grain-temp: 40deg;
+  --focus-tint: transparent;
+  --background: var(--paper);
+  --foreground: var(--ink);
+}
+
+html,
+body {
+  min-height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+body {
+  position: relative;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.grain-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  opacity: var(--grain);
+  mix-blend-mode: multiply;
+  filter: hue-rotate(var(--grain-temp));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.focus-tint {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: var(--focus-tint);
+}
+
+.bg-ruled {
+  background-color: var(--paper);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 27px,
+    rgba(18, 18, 18, 0.1) 28px
+  );
+}
+
+.bg-dotted {
+  background-color: var(--paper);
+  background-image: radial-gradient(#121212 1.1px, transparent 1.2px);
+  background-size: 14px 14px;
+}
+
+.washi::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 18%;
+  width: 64px;
+  height: 16px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(217, 204, 240, 0.95) 0 8px,
+    rgba(205, 227, 200, 0.95) 8px 16px
+  );
+  border: 2px solid #121212;
+  transform: rotate(-6deg);
+  pointer-events: none;
+}
+
+.fold-corner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-style: solid;
+  border-width: 0 18px 18px 0;
+  border-color: transparent #121212 #e6dfd2 transparent;
+  pointer-events: none;
+}
+
+.brutal-hover {
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.brutal-hover:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #121212;
+}
+.brutal-hover:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 #121212;
+}
+
+*:focus-visible {
+  outline: 3px solid #121212;
+  outline-offset: 2px;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 42s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes rain {
+  from {
+    transform: translateY(-20px);
+  }
+  to {
+    transform: translateY(20px);
+  }
+}
+
+.stamp-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: stamp 450ms ease forwards;
+}
+
+@keyframes stamp {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .brutal-hover {
+    transition: none;
+  }
+  .stamp-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: auto !important;
+  }
+}
